@@ -14,17 +14,13 @@ public class TimeATeamEnv extends Ambiente {
     private final int numRobos = 5;
     private RoboInfo[] robos;
     
-    double radius = 200;
-    double angle = 180;
-    double distance = radius * angle * Math.PI / 180;
-    boolean [] direction;
-    
     //Para inicializacoes necessarias
+    @Override
     public void setup() {
         robos = new RoboInfo[numRobos];
-        direction = new boolean[numRobos];
     }
 
+    @Override
     public boolean executeAction(String ag, Structure action) {
 
         //System.out.println(ag + " - Acao: " + action);
@@ -54,25 +50,10 @@ public class TimeATeamEnv extends Ambiente {
 
         for (robo = 1; robo < numRobos; robo++) {
 
-            //action.acao = RoboAction.DO_BOTH;
+            action.acao = RoboAction.DO_BOTH;
             action.asynchronous = true;
             
-            action.acao = RoboAction.RESUME;
-            action.maxTurnRate = angle / (distance / robos[robo].getVelocity());
             
-            if(robos[robo].getAction().state == RoboAction.DONE) {
-                action.acao = RoboAction.DO_BOTH;
-                if(!direction[robo]) {
-                    action.turnAng = angle;
-                    action.distance = distance;
-                } else {
-                    action.turnAng = -angle;
-                    action.distance = -distance;
-                }
-                direction[robo] = !direction[robo];
-            }
-            
-            /*
             if (xRefem > robos[robo].getX() && yRefem > robos[robo].getY()) {
                 action.turnAng = 0.0;
             } else if (xRefem > robos[robo].getX() && yRefem < robos[robo].getY()) {
@@ -93,7 +74,7 @@ public class TimeATeamEnv extends Ambiente {
                     action.distance = 100.0;
                 }
             }
-            */
+            
             getReferenciaServidor().setAction(myTeam, robo, action);
 
         }

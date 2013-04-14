@@ -2,6 +2,6 @@
 MAS roboAction {
     infrastructure: Centralised
     environment: TimeBTeamEnv("TimeB", "localhost")
-    agents: timeb_agente;
+    agents: agente;
     classpath: "dist/roborescue.jar";
 }
