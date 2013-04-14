@@ -1,4 +1,4 @@
-package robocode.rescue;
+package conexao;
 
 import jason.Jason;
 
