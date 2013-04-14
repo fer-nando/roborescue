@@ -3,7 +3,7 @@ package robocode.rescue;
 import util.ConstantesExecucao;
 import util.Transferencia;
 
-public class StartBattle {
+public class StartRobocode {
 
     public static void main(String[] args) {
         ConstantesExecucao.start("server");
