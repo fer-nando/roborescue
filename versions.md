@@ -16,6 +16,7 @@ O programa foi dividio em três módulos: Servidor, Robocode e Times.
 * O Servidor é o responsável pela comunicação entre o Robocode e os Times.
 * O Robocode code cria os robos e executa o ambiente simulado. Cada robo é um cliente do servidor e fica periodicamente enviando suas informações atuais e requisitando ações.
 * Os Times são desenvolvidos no framework Jason, composto basicamente por um Ambiente (Java) e um ou mais agentes (AgentSpeak). O Ambiente também é um cliente do servidor. Ele requisita as informações do seu time, gera percepções e executa as ações dos seus agentes, e envia ações para os robos. 
+
 Os alunos só precisão modificar os arquivos do Jason (ambiente + agentes) e cada time roda independente do outro.
 
 ### Modificações
