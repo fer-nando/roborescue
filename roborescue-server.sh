@@ -15,12 +15,12 @@ trap 'sair $SERVER $ROBOCODE; exit 0' 2
 
 java 	-cp "dist/roborescue.jar" \
 	-Djava.rmi.server.hostname=$1 \
-	robocode.rescue.StartServer &
+	conexao.StartServer &
 SERVER=$!
 java 	-cp "dist/roborescue.jar:dist/lib/*" \
 	-Xmx512M \
 	-DNOSECURITY=true \
-	robocode.rescue.Main &
+	robocode.rescue.StartRobocode &
 ROBOCODE=$!
 
 read -n 1
