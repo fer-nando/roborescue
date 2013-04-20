@@ -21,8 +21,8 @@ public class ServidorServente extends UnicastRemoteObject
     private RoboInfo[] robosTeamB;
     private int refemFollowingTeamA;
     private int refemFollowingTeamB;
-    private double battleFieldHeight = 2427;
-    private double battleFieldWidth = 1500;
+    private double battleFieldHeight = 1500;
+    private double battleFieldWidth = 2427;
     private boolean robotsStart = false;
     private boolean teamAStart = false;
     private boolean teamBStart = false;

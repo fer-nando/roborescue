@@ -65,7 +65,7 @@ public abstract class RoboClient extends TeamRobot {
                         if (info.getNumRobo() != 0) {
                             getRoboAction();
                         }
-                        Thread.sleep(50);
+                        Thread.sleep(20);
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();

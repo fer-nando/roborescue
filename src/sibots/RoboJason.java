@@ -15,7 +15,7 @@ public class RoboJason extends RoboClient {
     //Ja existe um while(true) chamando esse metodo;
     public void mainLoop() {
         
-        System.out.println(info.getAction().acao + "(" + info.getAction().state + ")");
+        //System.out.println(info.getAction().acao + "(" + info.getAction().state + ")");
 
         if (info.getAction().state != RoboAction.DONE) {
             
