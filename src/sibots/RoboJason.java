@@ -89,16 +89,6 @@ public class RoboJason extends RoboClient {
 
     }
     
-    @Override
-    public void onRobotDeath(RobotDeathEvent event) {
-      try {
-        if (getEnergy() == 0)
-          broadcastMessage(getName()+",Morri!");
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-    
 
     //O setup e rodado antes do mainLoop(), caso precise fazer alguma configuracao fora do loop principal
     @Override

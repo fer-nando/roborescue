@@ -5,6 +5,7 @@ import static robocode.util.Utils.normalRelativeAngle;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 import robocode.HitRobotEvent;
 import robocode.HitWallEvent;
 import robocode.MessageEvent;
+import robocode.RobotDeathEvent;
 import robocode.rescue.RoboInfo;
 import robocode.rescue.RoboClient;
 import util.ConstantesExecucao;
@@ -135,13 +137,12 @@ public class RoboRefem extends RoboClient {
         execute();
     }
     
-    @Override
-    public void onMessageReceived(MessageEvent event) {
-      //String sender = event.getSender();
-      String[] msg = event.getMessage().toString().split(",");
-      out.println(msg[0] + " sent me: " + msg[1]);
+     @Override
+    public void onRobotDeath(RobotDeathEvent event) {
+      String sender = event.getName();
+      out.println("\n" +sender + " MORREU!\n");
       if (Target != null) {
-        if (msg[1].equals("Morri!") && msg[0].equals(Target.getName())) {
+        if (sender.equals(Target.getName())) {
           try {
             deadRobots.add(Target.getName());
             Target = null;
