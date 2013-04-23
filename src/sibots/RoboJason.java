@@ -1,7 +1,7 @@
 package sibots;
 
-import robocode.HitWallEvent;
-import robocode.Rules;
+import java.io.IOException;
+import robocode.RobotDeathEvent;
 import robocode.rescue.RoboAction;
 import robocode.rescue.RoboClient;
 
@@ -87,6 +87,16 @@ public class RoboJason extends RoboClient {
 
         execute(); //necessario para que nao gere um erro xD
 
+    }
+    
+    @Override
+    public void onRobotDeath(RobotDeathEvent event) {
+      try {
+        if (getEnergy() == 0)
+          broadcastMessage(getName()+",Morri!");
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
     
 

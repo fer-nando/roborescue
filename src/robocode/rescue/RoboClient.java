@@ -47,6 +47,8 @@ public abstract class RoboClient extends TeamRobot {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            if (getEnergy() == 0)
+              break;
         }
     }
 
@@ -70,6 +72,8 @@ public abstract class RoboClient extends TeamRobot {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
+                    if (getEnergy() == 0)
+                      break;
                 }
 
             }

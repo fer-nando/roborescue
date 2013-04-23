@@ -6,9 +6,12 @@ import static robocode.util.Utils.normalRelativeAngle;
 import java.awt.Color;
 import java.awt.Point;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import robocode.HitRobotEvent;
 import robocode.HitWallEvent;
+import robocode.MessageEvent;
 import robocode.rescue.RoboInfo;
 import robocode.rescue.RoboClient;
 import util.ConstantesExecucao;
@@ -16,6 +19,7 @@ import util.ConstantesExecucao;
 public class RoboRefem extends RoboClient {
 
     private RoboInfo Target;
+    private List<String> deadRobots;
 
     public RoboRefem() {
     }
@@ -39,7 +43,7 @@ public class RoboRefem extends RoboClient {
             if (Target == null) {
                 RoboInfo[] robots = getTeamInfo();
                 for (RoboInfo ri : robots) {
-                    if (ri.getNumRobo() != info.getNumRobo()) {
+                    if (ri.getNumRobo() != info.getNumRobo() && !deadRobots.contains(ri.getName())) {
                         double distance = Point.distance(ri.getX(), ri.getY(), info.getX(), info.getY());
                         System.out.println(ri.getNumRobo() + " ; " + info.getNumRobo() + ":   " + distance);
                         if (distance <= 150) {
@@ -132,7 +136,26 @@ public class RoboRefem extends RoboClient {
     }
     
     @Override
+    public void onMessageReceived(MessageEvent event) {
+      //String sender = event.getSender();
+      String[] msg = event.getMessage().toString().split(",");
+      out.println(msg[0] + " sent me: " + msg[1]);
+      if (Target != null) {
+        if (msg[1].equals("Morri!") && msg[0].equals(Target.getName())) {
+          try {
+            deadRobots.add(Target.getName());
+            Target = null;
+            referenciaServidor.setFollowing(team, -1);
+          } catch (RemoteException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+    }
+    
+    @Override
     public void setup() {
         ConstantesExecucao.start("client");
+        deadRobots = new ArrayList<String>();
     }
 }
