@@ -2,7 +2,7 @@ package robocode.rescue;
 
 import java.io.Serializable;
 
-public class RoboInfo implements Serializable {
+public class RobotInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     public static final int Refem = 0;
@@ -11,39 +11,26 @@ public class RoboInfo implements Serializable {
     public static final int Robo3 = 3;
     public static final int Robo4 = 4;
     
-    private double height;
-    private double width;
     private double x;
     private double y;
     private double velocity;
     private double heading;
     private String name;
-    private int numRobo;
-    private RoboAction action;
+    private int robotIndex;
+    private RobotAction action;
 
-    public RoboInfo(String name) {
+    public RobotInfo(String name) {
         this.name = name;
-        init();
+        action = new RobotAction();
     }
-
-    private void init() {
-        action = new RoboAction();
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
+    
+    public RobotInfo(String name, int robotIndex, double x, double y, double velocity, double heading) {
+      this.name = name;
+      this.robotIndex = robotIndex;
+      this.x = x;
+      this.y = y;
+      this.velocity = velocity;
+      this.heading = heading;
     }
 
     public double getX() {
@@ -78,15 +65,15 @@ public class RoboInfo implements Serializable {
         this.velocity = velocity;
     }
 
-    public RoboAction getAction() {
+    public RobotAction getAction() {
         return action;
     }
 
-    public void setAction(RoboAction action) {
+    public void setAction(RobotAction action) {
         this.action.acao = action.acao;
         this.action.maxTurnRate = action.maxTurnRate;
         this.action.maxVelocity = action.maxVelocity;
-        if (!action.acao.equals(RoboAction.RESUME)) {
+        if (!action.acao.equals(RobotAction.RESUME)) {
             this.action.asynchronous = action.asynchronous;
             this.action.distance = action.distance;
             this.action.turnAng = action.turnAng;
@@ -98,11 +85,11 @@ public class RoboInfo implements Serializable {
         return name;
     }
 
-    public int getNumRobo() {
-        return numRobo;
+    public int getRobotIndex() {
+        return robotIndex;
     }
 
-    public void setNumRobo(int numRobo) {
-        this.numRobo = numRobo;
+    public void setRobotIndex(int robotIndex) {
+        this.robotIndex = robotIndex;
     }
 }

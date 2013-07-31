@@ -5,60 +5,61 @@ import static robocode.util.Utils.normalRelativeAngle;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
 import robocode.HitRobotEvent;
 import robocode.HitWallEvent;
-import robocode.MessageEvent;
 import robocode.RobotDeathEvent;
-import robocode.rescue.RoboInfo;
-import robocode.rescue.RoboClient;
-import util.ConstantesExecucao;
+import robocode.RoundEndedEvent;
+import robocode.WinEvent;
+import robocode.rescue.RMIRobot;
 
-public class RoboRefem extends RoboClient {
+public class RoboRefem extends RMIRobot {
 
-    private RoboInfo Target;
     private List<String> deadRobots;
 
     public RoboRefem() {
     }
+    
+    @Override
+    public void setup() {
+        deadRobots = new ArrayList<String>();
+    }    
 
     @Override
     public void mainLoop() {
-        procuraTarget();
+        procuratarget();
     }
 
-    private void procuraTarget() {
-        try {
-            if (Target != null) {
-                Target = getTeammate(Target.getNumRobo());
-                double distancia = Point.distance(Target.getX(), Target.getY(), info.getX(), info.getY());
+    private void procuratarget() {
+        /*try {
+            if (target != null) {
+                target = getTeammate(target.getNumRobo());
+                double distancia = Point.distance(target.getX(), target.getY(), info.getX(), info.getY());
                 if (distancia > 150) {
-                    Target = null;
+                    target = null;
                     setRobotColor();
-                    referenciaServidor.setFollowing(team, -1);
+                    //serverRef.setFollowing(myTeam, -1);
                 }
             }
-            if (Target == null) {
-                RoboInfo[] robots = getTeamInfo();
-                for (RoboInfo ri : robots) {
+            if (target == null) {
+                RobotInfo[] robots = getTeamInfo();
+                for (RobotInfo ri : robots) {
                     if (ri.getNumRobo() != info.getNumRobo() && !deadRobots.contains(ri.getName())) {
                         double distance = Point.distance(ri.getX(), ri.getY(), info.getX(), info.getY());
                         System.out.println(ri.getNumRobo() + " ; " + info.getNumRobo() + ":   " + distance);
                         if (distance <= 150) {
-                            Target = ri;
-                            System.out.println("Target:" + Target.getName());
-                            referenciaServidor.setFollowing(team, ri.getNumRobo());
+                            target = ri;
+                            System.out.println("target:" + target.getName());
+                            serverRef.setFollowing(myTeam, ri.getNumRobo());
                             break;
                         }
                     }
                 }
             }
-            if (Target != null) {
-                segueTarget();
+            if (target != null) {
+                seguetarget();
             } else {
                 System.out.println("doNothing");
                 setVelocity(0);
@@ -67,14 +68,14 @@ public class RoboRefem extends RoboClient {
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        }*/
 
         execute();
     }
 
-    private void segueTarget() {
-        System.out.println("Target:" + Target.getName());
-        double angle = normalAbsoluteAngle(Math.atan2(Target.getX() - info.getX(), Target.getY() - info.getY()));
+    private void seguetarget() {
+        System.out.println("target:" + target.getName());
+        double angle = normalAbsoluteAngle(Math.atan2(target.getX() - getX(), target.getY() - getY()));
         double turn = normalRelativeAngle(angle - getGunHeadingRadians()) * 180.0 / Math.PI;
         System.out.println("Angulo:" + turn);
         if (turn >= 0 && turn <= 180) {
@@ -85,20 +86,20 @@ public class RoboRefem extends RoboClient {
         }
 
         //waitFor(new TurnCompleteCondition(this));
-        setVelocity(Math.abs(Target.getVelocity()));
-        if (Point.distance(Target.getX(), Target.getY(), info.getX(), info.getY()) < 60) {
+        setVelocity(Math.abs(target.getVelocity()));
+        if (Point.distance(target.getX(), target.getY(), getX(), getY()) < 60) {
             setVelocity(0);
             System.out.println("Velocidade: 0.0 (dist < 60)");
         } else {
-            System.out.println("Velocidade: " + Target.getVelocity());
+            System.out.println("Velocidade: " + target.getVelocity());
         }
     }
 
     @Override
     public void setRobotColor() {
-        if (team.startsWith(ConstantesExecucao.nomeTeamA)) {
+        if (getRobotIndex() < 5) {
             setColors(Color.RED, Color.BLUE, Color.BLACK);
-        } else if (team.startsWith(ConstantesExecucao.nomeTeamB)) {
+        } else {
             setColors(Color.RED, Color.GREEN, Color.BLACK);
         }
     }
@@ -119,9 +120,9 @@ public class RoboRefem extends RoboClient {
         setMaxVelocity(8);
         double angulo = e.getBearing();
         if (angulo > -90 && angulo <= 90) {
-            setBack(10);
+            setBack(100);
         } else {
-            setAhead(10);
+            setAhead(100);
         }
         execute();
     }
@@ -130,9 +131,9 @@ public class RoboRefem extends RoboClient {
     public void onHitRobot(HitRobotEvent e) {
         double angulo = e.getBearing();
         if (angulo > -90 && angulo <= 90) {
-            setBack(10);
+            setBack(100);
         } else {
-            setAhead(10);
+            setAhead(100);
         }
         execute();
     }
@@ -140,23 +141,24 @@ public class RoboRefem extends RoboClient {
      @Override
     public void onRobotDeath(RobotDeathEvent event) {
       String sender = event.getName();
-      out.println("\n" +sender + " MORREU!\n");
-      if (Target != null) {
-        if (sender.equals(Target.getName())) {
-          try {
-            deadRobots.add(Target.getName());
-            Target = null;
-            referenciaServidor.setFollowing(team, -1);
-          } catch (RemoteException e) {
-            e.printStackTrace();
-          }
+      out.println("\n" +sender + " DIED!\n");
+      if (target != null) {
+        if (sender.equals(target.getName())) {
+          deadRobots.add(target.getName());
+          target = null;
         }
       }
     }
     
     @Override
-    public void setup() {
-        ConstantesExecucao.start("client");
-        deadRobots = new ArrayList<String>();
+    public void onWin(WinEvent event) {
+        setAhead(0);
+        turnRight(3600);
     }
+    
+    @Override
+    public void onRoundEnded(RoundEndedEvent event) {
+        battleEnded = true;
+    }
+    
 }

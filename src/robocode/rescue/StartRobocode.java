@@ -6,14 +6,15 @@ import util.Transferencia;
 public class StartRobocode {
 
     public static void main(String[] args) {
-        ConstantesExecucao.start("server");
-        Transferencia.transfere();
+        //ConstantesExecucao.start("server");
+        //Transferencia.transfere();
         BattleManager battle;
+        battle = new BattleManager(1);
         if(args.length > 0) {
-            battle = new BattleManager(1, Long.parseLong(args[0]));
+          battle.start("TimeA", "TimeB", Long.parseLong(args[0]));
         } else  {
-            battle = new BattleManager(1);
+          battle.start("TimeA", "TimeB", 0);
         }
-        battle.start();
+        
     }
 }

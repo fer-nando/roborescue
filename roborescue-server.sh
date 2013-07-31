@@ -13,9 +13,10 @@ echo ""
 
 trap 'sair $SERVER $ROBOCODE; exit 0' 2
 
-java 	-cp "dist/roborescue.jar" \
-	-Djava.rmi.server.hostname=$1 \
-	conexao.StartServer &
+ls
+#java 	-cp "dist/roborescue.jar" \
+#	-Djava.rmi.server.hostname=$1 \
+#	conexao.StartServer &
 SERVER=$!
 java 	-cp "dist/roborescue.jar:dist/lib/*" \
 	-Xmx512M \

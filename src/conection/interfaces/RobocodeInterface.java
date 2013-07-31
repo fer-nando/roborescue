@@ -1,16 +1,16 @@
-package conexao.interfaces;
+package conection.interfaces;
 
 import java.rmi.RemoteException;
 
-import robocode.rescue.RoboAction;
-import robocode.rescue.RoboInfo;
+import robocode.rescue.RobotAction;
+import robocode.rescue.RobotInfo;
+import robocode.rescue.interfaces.RMIRobotInterface;
 
-public interface InterfaceServidorRobocode extends InterfaceServidor {
+public interface RobocodeInterface extends ServerInterface {
 
 	//metodos que devem ser chamdos pelo robo
-	public RoboAction getAction(String TeamName, int robo) 
-                throws RemoteException;
-	public void setRoboInfo(String TeamName, int robo, RoboInfo info) 
+	/*
+    public RobotAction getAction(String TeamName, int robo) 
                 throws RemoteException;
 	public void setRoboInfo(String TeamName, int robo, double x, double y, 
                 double heading, double velocity, int state) 
@@ -21,4 +21,8 @@ public interface InterfaceServidorRobocode extends InterfaceServidor {
 	//metodos que sao chamados pelo refem
 	public void setFollowing(String TeamName, int robo) 
                 throws RemoteException;
+    */
+    
+    
+	void registerRobot(RMIRobotInterface robotRef, int index, String name) throws RemoteException;
 }

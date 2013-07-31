@@ -3,7 +3,7 @@ package robocode.rescue;
 import java.io.Serializable;
 import robocode.Rules;
 
-public class RoboAction implements Serializable {
+public class RobotAction implements Serializable {
 
     private static final long serialVersionUID = 3L;
     public static final String DO_NOTHING = "N";
@@ -26,7 +26,7 @@ public class RoboAction implements Serializable {
     public String acao;
     public int state;
     
-    public RoboAction() {
+    public RobotAction() {
         acao = DO_NOTHING;
         turnAng = 0.0;
         distance = 0.0;

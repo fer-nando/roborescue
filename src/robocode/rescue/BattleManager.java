@@ -1,5 +1,6 @@
 package robocode.rescue;
 
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,9 +12,10 @@ import robocode.control.BattlefieldSpecification;
 import robocode.control.RobocodeEngine;
 import robocode.control.RobotSpecification;
 import robocode.control.events.BattleAdaptor;
+import robocode.control.events.BattleCompletedEvent;
+import robocode.control.events.BattleFinishedEvent;
 import robocode.control.events.TurnEndedEvent;
 import robocode.control.snapshot.IRobotSnapshot;
-import util.ConstantesExecucao;
 
 public class BattleManager {
 
@@ -21,66 +23,59 @@ public class BattleManager {
     IRobotSnapshot refemA;
     IRobotSnapshot refemB;
     private int numRounds;
-    private long timeout;
-    boolean battleComplete = false;
-    int bFLargura = 2427; //2427 proporcao aurea =P
-    int bFAltura = 1500;
+    private int winner;
+    private boolean battleCompleted = false;
+    private String teamAName;
+    private String teamBName;
+    
+    private final String teamA = "sibots.TimeATeam*";
+    private final String teamB = "sibots.TimeBTeam*";
+    private final int battlefieldWidth = 2427; //2427 proporcao aurea =P
+    private final int battlefieldHeight = 1500;
+    
+    private final String initialPos;
+    private final Rectangle2D.Double aRescueArea = new Rectangle2D.Double(0, 0, 200, battlefieldHeight); 
+    private final Rectangle2D.Double bRescueArea = new Rectangle2D.Double(battlefieldWidth - 200, 0, 200, battlefieldHeight);
 
     public BattleManager(int numRounds) {
-        this.numRounds = numRounds;
-        this.timeout = 0;
+      this.numRounds = numRounds;
+      winner = -1;
+      
+      RoboPos rAR = new RoboPos(battlefieldWidth, 750, 270);
+      RoboPos rA1 = new RoboPos(200, 600, 90);
+      RoboPos rA2 = new RoboPos(200, 700, 90);
+      RoboPos rA3 = new RoboPos(200, 800, 90);
+      RoboPos rA4 = new RoboPos(200, 900, 90);
+      RoboPos rBR = new RoboPos(0, 750, 90);
+      RoboPos rB1 = new RoboPos(battlefieldWidth - 200, 600, 270);
+      RoboPos rB2 = new RoboPos(battlefieldWidth - 200, 700, 270);
+      RoboPos rB3 = new RoboPos(battlefieldWidth - 200, 800, 270);
+      RoboPos rB4 = new RoboPos(battlefieldWidth - 200, 900, 270);
+
+      initialPos = rAR + "," + rA1 + "," + rA2 + "," + rA3 + "," + rA4 + ","
+              + rBR + "," + rB1 + "," + rB2 + "," + rB3 + "," + rB4;
     }
 
-    public BattleManager(int numRounds, long timeout) {
-        this.numRounds = numRounds;
-        this.timeout = timeout;
-    }
-
-    public void start() {
-        File location = new File(ConstantesExecucao.caminhoRobocode);
-        engine = new RobocodeEngine(location);
+    public int start(String teamAName, String teamBName, long timeout) {
+        engine = new RobocodeEngine();
         BattleObserver listener = new BattleObserver();
         engine.addBattleListener(listener);
-
-        BattlefieldSpecification bfSpec = new BattlefieldSpecification(bFLargura, bFAltura);
-        //rodos que seram adicionados
-        //String pack = JOptionPane.showInputDialog("Digite o nome do packege que o Robo ou time se encontra");
-        String pack = "sibots";
-
-        //String teamA = JOptionPane.showInputDialog("Digite o nome do time A ou Robo1");
-        //String teamB = JOptionPane.showInputDialog("Digite o nome do time B ou Robo2");
-
-        String teamA = pack + "." + ConstantesExecucao.nomeTeamA + "Team*";
-        String teamB = pack + "." + ConstantesExecucao.nomeTeamB + "Team*";
-
-        //System.out.println(teamA + "\n" + teamB);
-
-        RobotSpecification[] robots = engine.getLocalRepository(teamA + ", " + teamB);
-
+        
         //especificação da batalha
+        BattlefieldSpecification bfSpec = new BattlefieldSpecification(
+              battlefieldWidth, battlefieldHeight, new Rectangle2D.Double[]{aRescueArea, bRescueArea});
+        RobotSpecification[] robots = engine.getLocalRepository(teamA + ", " + teamB);
         BattleSpecification battle = new BattleSpecification(numRounds, Long.MAX_VALUE, 0, false, bfSpec, robots);
+        
+        this.teamAName = teamAName;
+        this.teamBName = teamBName;
+        String teamNames = teamAName + "," + teamBName;
 
-        RoboPos rAR = new RoboPos(bFLargura, 750, 270);
-        RoboPos rA1 = new RoboPos(200, 600, 90);
-        RoboPos rA2 = new RoboPos(200, 700, 90);
-        RoboPos rA3 = new RoboPos(200, 800, 90);
-        RoboPos rA4 = new RoboPos(200, 900, 90);
-        RoboPos rBR = new RoboPos(0, 750, 90);
-        RoboPos rB1 = new RoboPos(bFLargura - 200, 600, 270);
-        RoboPos rB2 = new RoboPos(bFLargura - 200, 700, 270);
-        RoboPos rB3 = new RoboPos(bFLargura - 200, 800, 270);
-        RoboPos rB4 = new RoboPos(bFLargura - 200, 900, 270);
-
-        String initialPos = rAR + "," + rA1 + "," + rA2 + "," + rA3 + "," + rA4 + ","
-                + rBR + "," + rB1 + "," + rB2 + "," + rB3 + "," + rB4;
-
-        //System.out.println(initialPos);
-
-        System.out.println("[Robocode] " + ConstantesExecucao.nomeTeamA
-                + " vs " + ConstantesExecucao.nomeTeamB);
+        
+        System.out.println("[Robocode] " + teamAName + " vs " + teamBName);
         System.out.println("[Robocode] Batalha iniciada!");
         engine.setVisible(true);
-        engine.runBattle(battle, initialPos, false);
+        engine.runBattle(battle, initialPos, teamNames, false);
 
         if(timeout > 0) {
             try {
@@ -88,13 +83,8 @@ public class BattleManager {
             } catch (InterruptedException ex) {
                 System.out.println("InterruptedException: " + ex);
             }
-            if (!battleComplete) {
+            if (!battleCompleted) {
                 // timeout
-                System.out.println("\n[Robocode] TIMEOUT!");
-                System.out.println("[Robocode] Distancia do " + ConstantesExecucao.nomeTeamA + "  = "
-                        + (refemA.getX() - 200));
-                System.out.println("[Robocode] Distancia do " + ConstantesExecucao.nomeTeamB + "  = "
-                        + (bFLargura - 200 - refemB.getX()));
                 engine.abortCurrentBattle();
             }
         } else {
@@ -102,34 +92,67 @@ public class BattleManager {
         }
 
         System.out.println("[Robocode] Batalha terminada!");
+        
+        try {            
+          Thread.sleep(30000);
+        } catch (InterruptedException ex) {
+          Logger.getLogger(BattleManager.class.getName()).log(Level.SEVERE, null, ex);
+        }        
         engine.close();
-        System.exit(0);
+                
+        return winner;
     }
+    
+    public double getBattlefieldWidth() {
+      return battlefieldWidth;
+    }
+    public double getBattlefieldHeight() {
+      return battlefieldHeight;
+    }
+    public Rectangle2D.Double getRescueArea(char team) {
+      if (team == 'a') {
+        return aRescueArea;
+      } else if (team == 'b') {
+        return bRescueArea;
+      } else {
+        return null;
+      }
+    }
+    
 
     private class BattleObserver extends BattleAdaptor {
+      
+        IRobotSnapshot[] robots;
 
         @Override
         public void onTurnEnded(TurnEndedEvent event) {
-            IRobotSnapshot[] robots = event.getTurnSnapshot().getRobots();
-            refemA = robots[0];
-            refemB = robots[5];
-
-            if (refemA.getX() <= 200 && refemB.getX() >= bFLargura - 200) {
-                // empate
-                battleComplete = true;
-                System.out.println("\n[Robocode] EMPATE!");
-                engine.abortCurrentBattle();
-            } else if (refemA.getX() <= 200) {
-                // vencedor = A
-                battleComplete = true;
-                System.out.println("\n[Robocode] VENCEDOR: " + ConstantesExecucao.nomeTeamA);
-                engine.abortCurrentBattle();
-            } else if (refemB.getX() >= bFLargura - 200) {
-                // vencedor = B
-                battleComplete = true;
-                System.out.println("\n[Robocode] VENCEDOR: " + ConstantesExecucao.nomeTeamB);
-                engine.abortCurrentBattle();
-            }
+            robots = event.getTurnSnapshot().getRobots();
+        }
+        
+        @Override
+        public void onBattleFinished(BattleFinishedEvent event) {
+          if (event.isAborted()) {
+            System.out.println("\n[Robocode] TIMEOUT!");
+            System.out.println("\n[Robocode] EMPATE!");
+            System.out.println("[Robocode] Distancia do " + teamAName + " = "
+                    + (refemA.getX() - 200));
+            System.out.println("[Robocode] Distancia do " + teamBName + " = "
+                    + (battlefieldWidth - 200 - refemB.getX()));
+          }
+          winner = -1;
+        }
+        
+        @Override
+        public void onBattleCompleted(BattleCompletedEvent event) {
+          String winnerName;
+          if (event.getWinnerTeam() == 0) {
+            winnerName = teamAName;
+          } else {
+            winnerName = teamBName;
+          }
+          System.out.println("\n[Robocode] VENCEDOR: " + winnerName);
+          battleCompleted = true;
+          winner = event.getWinnerTeam();
         }
     }
 

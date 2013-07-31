@@ -4,10 +4,6 @@ import jason.JasonException;
 
 import java.rmi.RemoteException;
 
-import util.ConstantesExecucao;
-import util.Transferencia;
-
-
 public class Jason {
 
 	public Jason() throws JasonException {
@@ -19,9 +15,6 @@ public class Jason {
 
 	public static void main(String[] args) throws JasonException, RemoteException {
 
-		ConstantesExecucao.start("client");
-		//Transferencia.transfere();
-		// Jason
 		new Jason();
 	}
 }
