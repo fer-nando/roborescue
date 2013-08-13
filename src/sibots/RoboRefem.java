@@ -5,6 +5,7 @@ import static robocode.util.Utils.normalRelativeAngle;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import robocode.RobotDeathEvent;
 import robocode.RoundEndedEvent;
 import robocode.WinEvent;
 import robocode.rescue.RMIRobot;
+import robocode.rescue.RobotInfo;
 
 public class RoboRefem extends RMIRobot {
 
@@ -29,30 +31,26 @@ public class RoboRefem extends RMIRobot {
 
     @Override
     public void mainLoop() {
-        procuratarget();
-    }
-
-    private void procuratarget() {
-        /*try {
+        try {
             if (target != null) {
-                target = getTeammate(target.getNumRobo());
-                double distancia = Point.distance(target.getX(), target.getY(), info.getX(), info.getY());
+                target = serverRef.getRobotInfo(myTeam, target.getRobotIndex());
+                double distancia = Point.distance(target.getX(), target.getY(), getX(), getY());
                 if (distancia > 150) {
                     target = null;
-                    setRobotColor();
+                    //setRobotColor();
                     //serverRef.setFollowing(myTeam, -1);
                 }
             }
             if (target == null) {
-                RobotInfo[] robots = getTeamInfo();
+                RobotInfo[] robots = serverRef.getMyTeamInfo(myTeam);
                 for (RobotInfo ri : robots) {
-                    if (ri.getNumRobo() != info.getNumRobo() && !deadRobots.contains(ri.getName())) {
-                        double distance = Point.distance(ri.getX(), ri.getY(), info.getX(), info.getY());
-                        System.out.println(ri.getNumRobo() + " ; " + info.getNumRobo() + ":   " + distance);
+                    if (ri.getRobotIndex() != this.getRobotIndex() && !deadRobots.contains(ri.getName())) {
+                        double distance = Point.distance(ri.getX(), ri.getY(), getX(), getY());
+                        System.out.println(ri.getRobotIndex() + " ; " + this.getRobotIndex() + ":   " + distance);
                         if (distance <= 150) {
                             target = ri;
                             System.out.println("target:" + target.getName());
-                            serverRef.setFollowing(myTeam, ri.getNumRobo());
+                            //serverRef.setFollowing(myTeam, ri.getRobotIndex());
                             break;
                         }
                     }
@@ -68,9 +66,7 @@ public class RoboRefem extends RMIRobot {
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }*/
-
-        execute();
+        }
     }
 
     private void seguetarget() {

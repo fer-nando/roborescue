@@ -27,8 +27,6 @@ public class ServerImpl extends UnicastRemoteObject
   private int counterTeamB;
   private RMIRobotInterface[] aRobots;
   private RMIRobotInterface[] bRobots;
-  private int aHostageFollowing;
-  private int bHostageFollowing;
   private boolean robotsReady;
   private boolean teamAReady;
   private boolean teamBReady;
@@ -66,8 +64,6 @@ public class ServerImpl extends UnicastRemoteObject
     counterTeamB = 0;
     aRobots = new RMIRobotInterface[teamSize];
     bRobots = new RMIRobotInterface[teamSize];
-    aHostageFollowing = -1;
-    bHostageFollowing = -1;
     robotsReady = false;
     teamAReady = false;
     teamBReady = false;
@@ -263,6 +259,16 @@ public class ServerImpl extends UnicastRemoteObject
         team[i] = aRobots[i].getRobotInfo();      
     }
     return team;
+  }
+  
+  @Override
+  public RobotInfo getRobotInfo(String teamName, int robot) throws RemoteException {
+    if (teamName.equals(teamAName)) {
+      return aRobots[robot].getRobotInfo();      
+    } else if (teamName.equals(teamBName)) {
+      return bRobots[robot-teamSize].getRobotInfo();      
+    }
+    return null;
   }
   
   /*

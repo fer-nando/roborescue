@@ -58,10 +58,14 @@ public abstract class RMIRobot extends TeamRobot {
                     doNothing();
                     execute();
                 } else {
-                  actionsList = robotRef.waitUntilReady();
-                  if (actionsList != null)
+                  if (getRobotIndex() % 5 != 0) {
+                    actionsList = robotRef.waitUntilReady();
+                    if (actionsList != null)
+                      mainLoop();
+                    robotRef.unblockExecute();
+                  } else {
                     mainLoop();
-                  robotRef.unblockExecute();
+                  }
                   execute();
                   //Thread.sleep(10);
                 }
@@ -81,7 +85,14 @@ public abstract class RMIRobot extends TeamRobot {
       
       String name = getName();
       int num = getRobotIndex();
-      System.out.println(name + ": index = " + num);
+      if (getRobotIndex() % 5 != 0) {
+        myTeam = name.substring(0, name.indexOf('*'));
+      } else {
+        myTeam = name.substring(0, name.indexOf("Refem"));
+      }
+      System.out.println(name + " (" + myTeam + "): index = " + num);
+      
+      setup();
     }
     
     public int isFollowing() {

@@ -8,9 +8,11 @@ import robocode.rescue.RobotInfo;
 
 public interface ServerInterface extends Remote {
 
-	public boolean isStarted()throws RemoteException;
+	boolean isStarted()throws RemoteException;
+    RobotInfo[] getMyTeamInfo(String teamName)throws RemoteException;
+    RobotInfo[] getEnemyTeamInfo(String teamName)throws RemoteException;
+	RobotInfo getRobotInfo(String teamName, int robot)throws RemoteException;
     /*
-	public RobotInfo getRoboInfo(String TeamName, int robo)throws RemoteException;
 	public RobotInfo[] getTeamInfo(String TeamName)throws RemoteException;
     */
 	

@@ -62,7 +62,7 @@ public class RMIRobotImpl extends UnicastRemoteObject implements RMIRobotInterfa
         Logger.getLogger(RMIRobotImpl.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
-    System.out.println(">> Execute");
+    //System.out.println(">> Execute");
   }
 
   @Override

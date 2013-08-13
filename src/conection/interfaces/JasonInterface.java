@@ -24,6 +24,4 @@ public interface JasonInterface extends ServerInterface  {
     double getBattlefieldWidth() throws RemoteException;
     Rectangle2D.Double getRescueArea(String teamName) throws RemoteException;
     RMIRobotInterface[] getTeamInterfaces(String teamName)  throws RemoteException;
-    RobotInfo[] getMyTeamInfo(String teamName)throws RemoteException;
-    RobotInfo[] getEnemyTeamInfo(String teamName)throws RemoteException;
 }
