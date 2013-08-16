@@ -1,8 +1,8 @@
 ## Versão 2.1.0 (16-Ago-2013)
 
 * Criada uma interface para inicialização das partidas e visualização da pontuação, não é preciso mais inicializar o servidor e o robocode separadamente.
-* A classe 'RoboAction' não é mais utilizada, agora o servidor passa a interface dos robos e as ações são enviadas diretamente para eles, de modo similar ao utilizado dentro da classe dos robos.
-* Os comandos enviados para os robos, ex. 'setAhead' e 'setTurnRight', são armazenados em uma fila e só são executados quando chamada a função 'execute'. A função 'execute' é sincrona, só retorna quando todos os comandos da fila são executados, mas não garante que os movimentos assíncronos tenham terminado de executar. Para isso existem as funções 'getDistanceRemaining' e 'getTurnRemaining'.
+* A classe ``RoboAction`` não é mais utilizada, agora o servidor passa a interface dos robos e as ações são enviadas diretamente para eles, de modo similar ao utilizado dentro da classe dos robos.
+* Os comandos enviados para os robos, ex. ``setAhead`` e ``setTurnRight``, são armazenados em uma fila e só são executados quando chamada a função ``execute``. A função ``execute`` é sincrona, só retorna quando todos os comandos da fila são executados, mas não garante que os movimentos assíncronos tenham terminado de executar. Para isso existem as funções ``getDistanceRemaining`` e ``getTurnRemaining``.
 
 
 ## Versão 2.0.1 (13-Apr-2013)
