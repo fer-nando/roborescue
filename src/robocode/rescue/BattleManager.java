@@ -1,11 +1,8 @@
 package robocode.rescue;
 
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.JOptionPane;
 
 import robocode.control.BattleSpecification;
 import robocode.control.BattlefieldSpecification;
@@ -94,7 +91,7 @@ public class BattleManager {
         System.out.println("[Robocode] Batalha terminada!");
         
         try {            
-          Thread.sleep(30000);
+          Thread.sleep(10000);
         } catch (InterruptedException ex) {
           Logger.getLogger(BattleManager.class.getName()).log(Level.SEVERE, null, ex);
         }        
