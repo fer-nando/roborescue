@@ -28,6 +28,8 @@ public interface RMIRobotInterface extends Remote {
   
   void setTurnLeft(double angle) throws RemoteException;
   
+  void setMaxTurnRate(double rate) throws RemoteException;
+  
   int isFollowing() throws RemoteException;
   
   double getDistanceRemaining() throws RemoteException;

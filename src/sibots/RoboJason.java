@@ -34,6 +34,14 @@ public class RoboJason extends RMIRobot {
               System.out.println(">> ahead " + action.distance);
               ahead(action.distance);
             }
+          } else if (action.acao.equals(RobotAction.MOVE_BACK)) {
+            if (action.asynchronous) {
+              System.out.println(">> setBack " + action.distance);
+              setBack(action.distance);
+            } else {
+              System.out.println(">> back " + action.distance);
+              back(action.distance);
+            }
           } else if (action.acao.equals(RobotAction.TURN_RIGHT)) {
             if (action.asynchronous) {
               System.out.println(">> setTurnRight " + action.turnAng);
@@ -42,8 +50,21 @@ public class RoboJason extends RMIRobot {
               System.out.println(">> turnRight " + action.turnAng);
               turnRight(action.turnAng);
             }
+          } else if (action.acao.equals(RobotAction.TURN_LEFT)) {
+            if (action.asynchronous) {
+              System.out.println(">> setTurnLeft " + action.turnAng);
+              setTurnLeft(action.turnAng);
+            } else {
+              System.out.println(">> turnLeft " + action.turnAng);
+              turnLeft(action.turnAng);
+            }
+          } else if (action.acao.equals(RobotAction.RESUME)) {
+            System.out.println(">> maxTurnRate " + action.maxTurnRate);
+            setMaxTurnRate(action.maxTurnRate);
+            
           }
         }
+        
         //execute();
         actionsList.clear();
     }

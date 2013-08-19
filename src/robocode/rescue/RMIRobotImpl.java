@@ -76,7 +76,11 @@ public class RMIRobotImpl extends UnicastRemoteObject implements RMIRobotInterfa
 
   @Override
   public void back(double distance) throws RemoteException {
-    robot.back(distance);
+    RobotAction action = new RobotAction();
+    action.asynchronous = false;
+    action.acao = RobotAction.MOVE_BACK;
+    action.distance = distance;
+    actionsList.add(action);
   }
 
   @Override
@@ -90,7 +94,11 @@ public class RMIRobotImpl extends UnicastRemoteObject implements RMIRobotInterfa
 
   @Override
   public void turnLeft(double angle) throws RemoteException {
-    robot.turnLeft(angle);
+    RobotAction action = new RobotAction();
+    action.asynchronous = false;
+    action.acao = RobotAction.TURN_LEFT;
+    action.turnAng = angle;
+    actionsList.add(action);
   }
 
   @Override
@@ -106,7 +114,11 @@ public class RMIRobotImpl extends UnicastRemoteObject implements RMIRobotInterfa
 
   @Override
   public void setBack(double distance) throws RemoteException {
-    robot.setBack(distance);
+    RobotAction action = new RobotAction();
+    action.asynchronous = true;
+    action.acao = RobotAction.MOVE_BACK;
+    action.distance = distance;
+    actionsList.add(action);
   }
 
   @Override
@@ -122,7 +134,19 @@ public class RMIRobotImpl extends UnicastRemoteObject implements RMIRobotInterfa
 
   @Override
   public void setTurnLeft(double angle) throws RemoteException {
-    robot.setTurnLeft(angle);
+    RobotAction action = new RobotAction();
+    action.asynchronous = true;
+    action.acao = RobotAction.TURN_LEFT;
+    action.turnAng = angle;
+    actionsList.add(action);
+  }
+  
+  @Override
+  public void setMaxTurnRate(double rate) throws RemoteException {
+    RobotAction action = new RobotAction();
+    action.acao = RobotAction.RESUME;
+    action.maxTurnRate = rate;
+    actionsList.add(action);
   }
 
   @Override
