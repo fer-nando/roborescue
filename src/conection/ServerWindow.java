@@ -46,7 +46,7 @@ public class ServerWindow extends javax.swing.JFrame {
       @Override
       public void run() {
         try {
-          Thread.sleep(5000);
+          Thread.sleep(2000);
           server.start();
         } catch (InterruptedException ex) {
           Logger.getLogger(ServerWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -236,7 +236,7 @@ public class ServerWindow extends javax.swing.JFrame {
           .addComponent(durationField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(durationLabel)
           .addComponent(minLabel))
-        .addContainerGap(21, Short.MAX_VALUE))
+        .addContainerGap(13, Short.MAX_VALUE))
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -285,6 +285,7 @@ public class ServerWindow extends javax.swing.JFrame {
     @Override
     public void run() {
       int duration = Integer.valueOf(durationField.getText()) * 60000;
+      //BattleManager battle = new BattleManager(1);
       winner = battle.start(teamA, teamB, duration);
       setVisible(true);
       isRunning = false;

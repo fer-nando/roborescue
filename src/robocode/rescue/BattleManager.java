@@ -17,8 +17,6 @@ import robocode.control.snapshot.IRobotSnapshot;
 public class BattleManager {
 
     RobocodeEngine engine;
-    IRobotSnapshot refemA;
-    IRobotSnapshot refemB;
     private int numRounds;
     private int winner;
     private boolean battleCompleted = false;
@@ -129,12 +127,13 @@ public class BattleManager {
         @Override
         public void onBattleFinished(BattleFinishedEvent event) {
           if (event.isAborted()) {
+            
             System.out.println("\n[Robocode] TIMEOUT!");
             System.out.println("\n[Robocode] EMPATE!");
             System.out.println("[Robocode] Distancia do " + teamAName + " = "
-                    + (refemA.getX() - 200));
+                    + (robots[0].getX() - 200));
             System.out.println("[Robocode] Distancia do " + teamBName + " = "
-                    + (battlefieldWidth - 200 - refemB.getX()));
+                    + (battlefieldWidth - 200 - robots[5].getX()));
           }
           winner = -1;
         }
