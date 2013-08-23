@@ -1,6 +1,7 @@
 package robocode.rescue;
 
 import java.awt.geom.Rectangle2D;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +20,7 @@ public class BattleManager {
     RobocodeEngine engine;
     private int numRounds;
     private int winner;
-    private boolean battleCompleted = false;
+    private final AtomicBoolean battleCompleted = new AtomicBoolean(false);
     private String teamAName;
     private String teamBName;
     
@@ -73,12 +74,19 @@ public class BattleManager {
         engine.runBattle(battle, initialPos, teamNames, false);
 
         if(timeout > 0) {
-            try {
-                Thread.sleep(timeout);
-            } catch (InterruptedException ex) {
-                System.out.println("InterruptedException: " + ex);
+            long initialTime = System.currentTimeMillis();
+            long remainingTime = timeout;
+            synchronized(battleCompleted) {
+              while(!battleCompleted.get() || remainingTime <= 0) {
+                try {
+                  battleCompleted.wait(remainingTime);
+                  remainingTime = (initialTime + timeout) - System.currentTimeMillis();
+                } catch (InterruptedException ex) {
+                  Logger.getLogger(BattleManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+              }
             }
-            if (!battleCompleted) {
+            if (!battleCompleted.get()) {
                 // timeout
                 engine.abortCurrentBattle();
             }
@@ -147,7 +155,10 @@ public class BattleManager {
             winnerName = teamBName;
           }
           System.out.println("\n[Robocode] VENCEDOR: " + winnerName);
-          battleCompleted = true;
+          synchronized(battleCompleted) {
+            battleCompleted.set(true);
+            battleCompleted.notify();
+          }
           winner = event.getWinnerTeam();
         }
     }
